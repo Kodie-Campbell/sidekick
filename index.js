@@ -17,5 +17,5 @@ const web = new WebClient(process.env.BOT_TOKEN);
 
 web.chat.postMessage({
     channel: '#test',
-    text: 'I am online and working a second time',
+    text: 'I am online and working a third time',
 })
