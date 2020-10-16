@@ -1,26 +1,21 @@
 // require dependencies 
-const SlackBot = require('slackbots');
+const {
+    WebClient
+} = require('@slack/web-api');
+const {
+    EventClient
+} = require('@slack/events-api');
 // axios is an HTTP client https://github.com/axios/axios
 const axios = require('axios');
 // dotenv loads env's to hide sensitive data 
 const dotenv = require('dotenv');
 
+dotenv.config()
 
 // create bot and get the bot token
-const bot = new SlackBot({
-    token: `${process.env.BOT_TOKEN}`,
-    name: 'sidekick'
+const web = new WebClient(process.env.BOT_TOKEN);
 
-});
-
-bot.on('start', () => {
-    const params = {
-        icon_emoji: ':robot_face:'
-    }
-
-    bot.postMessageToChannel(
-        'test',
-        'This is a test to see if i am on and working',
-        params
-    );
-});
+web.chat.postMessage({
+    channel: '#test',
+    text: 'I am online and working',
+})
