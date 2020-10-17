@@ -11,6 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "@slack/events-api": "^2.3.4",
+    "@slack/rtm-api": "^5.0.5",
     "@slack/web-api": "^5.12.0",
     "axios": "^0.20.0",
     "dotenv": "^8.2.0",
