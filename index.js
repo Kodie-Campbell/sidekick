@@ -55,17 +55,23 @@ slackEvents.on('message', (Event) => {
         })
     }
 
-    // check if message is a question
+    // check if message is a question and saves text to a var
     if (messageText.includes('?')) {
         const questionText = messageText
+        // used to remove punctuation from a users question for comparisions 
         const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+        // turns the users question into an array we can loop though 
         var questionAr = questionText.split(' ');
+        // hold a counter to know how to respond after checking for keywords 
         var colorQ = 0
         var weatherQ = 0
+        // loads our keyword files 
         var colorFile = fs.readFileSync('color.txt', 'utf8');
         var weatherFile = fs.readFileSync('weather.txt', 'utf8');
+        // turns out keyword files into an array 
         var colorAr = colorFile.replace(regex, '').split(', ');
         var weatherAr = weatherFile.split(', ');
+        // checks user message against keyword arrays and increments the corrosponding counter 
         questionAr.forEach(element => {
             if (colorAr.includes(element)) {
                 colorQ++
@@ -76,7 +82,8 @@ slackEvents.on('message', (Event) => {
                 weatherQ++
             }
         })
-
+        // checks what counter is higher and responds with a related message this is not a great 
+        // way of doing it because with lots of questions it will be a lot of if statements 
         if (colorQ > weatherQ) {
             web.chat.postMessage({
                 channel: Event.channel,
@@ -89,6 +96,7 @@ slackEvents.on('message', (Event) => {
                 thread_ts: Event.ts,
                 text: 'It is always a great day'
             });
+            // if it does not match a knonw question respond to the user that it does not understand
         } else {
             web.chat.postMessage({
                 channel: Event.channel,
@@ -96,7 +104,6 @@ slackEvents.on('message', (Event) => {
                 text: 'I am not sure what you are asking'
             });
         }
-
 
 
     }
