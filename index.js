@@ -10,7 +10,7 @@ const {
 
 // axios is an HTTP client https://github.com/axios/axios
 const axios = require('axios');
-// dotenv loads env's to hide sensitive data 
+// dotenv loads environmental variables to hide sensitive data 
 const dotenv = require('dotenv');
 
 dotenv.config()
@@ -29,17 +29,17 @@ web.chat.postMessage({
     text: 'I am online and working!',
 })
 
-// create an adapter to recive events from slack
+// create an adapter to receive events from slack
 const slackEvents = createEventAdapter(process.env.SLACK_SIGNING_SECRET);
 const port = process.env.PORT || 15119;
 
 
-// logs messages recived to the console 
+// logs messages received to the console 
 slackEvents.on('message', (Event) => {
-    console.log(`Received a message event: user ${Event.user} in channek ${Event.channel} says ${Event.text}`);
+    console.log(`Received a message event: user ${Event.user} in channel ${Event.channel} says ${Event.text}`);
     //stores the text of the message to a var
     const messageText = Event.text
-    // creates a varibile that we can check to see if a message is part of a thread
+    // creates a variable that we can check to see if a message is part of a thread
     let threadValue = 0
     // if the message is not a part of a thread this will become undefined
     threadValue = Event.thread_ts
@@ -57,7 +57,7 @@ slackEvents.on('message', (Event) => {
 
     // check if message is a question and saves text to a var
     if (messageText.includes('?')) {
-        // used to remove punctuation from a users question for comparisions
+        // used to remove punctuation from a users question for comparisons
         const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
         const messageTextClean = removePunctuation(messageText)
         const questionText = messageTextClean
@@ -80,7 +80,7 @@ slackEvents.on('message', (Event) => {
         // turns out keyword files into an array 
         var colorAr = colorFile.split(', ');
         var weatherAr = weatherFile.split(', ');
-        // checks user message against keyword arrays and increments the corrosponding counter 
+        // checks user message against keyword arrays and increments the corresponding counter 
         questionAr.forEach(element => {
             if (colorAr.includes(element)) {
                 colorQ++
@@ -96,19 +96,19 @@ slackEvents.on('message', (Event) => {
         // checks what counter is higher and responds with a related message this is not a great 
         // way of doing it because with lots of questions it will be a lot of if statements 
 
-        // adds question variables to a dictinary
+        // adds question variables to a dictionary
         let testAnswer = {
             colorQ,
             weatherQ,
             unknownQ
         }
-        // finds the greatest value in the dictonary 
+        // finds the greatest value in the dictionary 
         greatest = Object.values(testAnswer).sort((a, b) => a - b).pop()
         // finds the key that matches the greatest value 
         key = Object.keys(testAnswer).find(k => testAnswer[k] === greatest)
         console.log(key)
 
-        // makes a dictinary out of possibal answers 
+        // makes a dictionary out of possible answers 
         const answers = {
             colorQ: 'My favorite color is blue!',
             weatherQ: 'It is always a great day',
@@ -124,7 +124,7 @@ slackEvents.on('message', (Event) => {
     }
 
 });
-// logs any erros from the event handler 
+// logs any errors from the event handler 
 slackEvents.on('error', console.error);
 
 // turns on the event handler 
