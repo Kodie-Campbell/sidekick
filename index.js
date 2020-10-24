@@ -15,13 +15,18 @@ const dotenv = require('dotenv');
 
 dotenv.config()
 
+const fs = require('fs');
+const {
+    setUncaughtExceptionCaptureCallback
+} = require('process');
+
 // create bot and get the bot token
 const web = new WebClient(process.env.BOT_TOKEN);
 
 // post a message when going online
 web.chat.postMessage({
     channel: '#test',
-    text: 'I am online and working a third time',
+    text: 'I am online and working!',
 })
 
 // create an adapter to recive events from slack
@@ -49,18 +54,52 @@ slackEvents.on('message', (Event) => {
             text: 'thanks for talking to me',
         })
     }
-    // if the message was not sent by the bot and is part of a thread reply
-    // this is dumb because it will constantly repete this in a thread 
-    // remove this once done testing 
-    if (Event.user !== 'U01CC0WFQQ7' && typeof threadValue !== 'undefined') {
-        web.chat.postMessage({
-            channel: Event.channel,
-            thread_ts: Event.thread_ts,
-            text: 'we are having a conversation',
 
+    // check if message is a question
+    if (messageText.includes('?')) {
+        const questionText = messageText
+        const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+        var questionAr = questionText.split(' ');
+        var colorQ = 0
+        var weatherQ = 0
+        var colorFile = fs.readFileSync('color.txt', 'utf8');
+        var weatherFile = fs.readFileSync('weather.txt', 'utf8');
+        var colorAr = colorFile.replace(regex, '').split(', ');
+        var weatherAr = weatherFile.split(', ');
+        questionAr.forEach(element => {
+            if (colorAr.includes(element)) {
+                colorQ++
+            }
+        });
+        questionAr.forEach(element => {
+            if (weatherAr.includes(element)) {
+                weatherQ++
+            }
         })
-    }
 
+        if (colorQ > weatherQ) {
+            web.chat.postMessage({
+                channel: Event.channel,
+                thread_ts: Event.ts,
+                text: 'My favorite color is blue!'
+            });
+        } else if (weatherQ > colorQ) {
+            web.chat.postMessage({
+                channel: Event.channel,
+                thread_ts: Event.ts,
+                text: 'It is always a great day'
+            });
+        } else {
+            web.chat.postMessage({
+                channel: Event.channel,
+                thread_ts: Event.ts,
+                text: 'I am not sure what you are asking'
+            });
+        }
+
+
+
+    }
 
 });
 // logs any erros from the event handler 

@@ -1,0 +1,1 @@
+weather, rain, raining, sunshine, cloudy, hot, cold, warm, cool
