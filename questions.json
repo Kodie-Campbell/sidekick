@@ -1,0 +1,21 @@
+{
+    "question": [
+        {
+            "id": "01",
+            "title": "Weather",
+            "description": "A question about the weather",
+            "keywords": ["weather", "rain", "raining", "sunshine", "cloudy", "hot", "cold", "warm", "cool", "sunny" ],
+            "answer": "It is always a great day",
+            "counter": "weatherQ"
+        }
+
+        {
+            "id": "02",
+            "title": "Color",
+            "description": "A question about favorite color",
+            "keywords": ["color", "favorite", "blue", "red", "green", "yellow", "purple", "pink"],
+            "answer": "My favorite color is blue!",
+            "counter": "colorQ"
+        }
+    ]
+}
