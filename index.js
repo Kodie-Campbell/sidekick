@@ -48,7 +48,7 @@ slackEvents.on('message', (Event) => {
     let threadValue = 0
     // if the message is not a part of a thread this will become undefined
     threadValue = Event.thread_ts
-    console.log(typeof threadValue)
+
     // print the entire message payload to the  console 
     console.log(Event)
     // if the message text includes the bot name reply in a thread 
@@ -74,18 +74,18 @@ slackEvents.on('message', (Event) => {
         }
         // turns the users question into an array we can loop though 
         var questionAr = questionText.split(' ');
-        console.log(questionAr)
+
 
         // create a list of counters to use a variables 
         var counters = [];
         for (i = 0; i < questions.length; i++) {
             counters[i] = questions[i]["counter"]
         }
-        console.log(`counters is set to: ${counters}`)
+
         // turn list into key value pairs to hold data 
         var countersValue = counters.reduce((obj, arrValue) => (obj[arrValue] = 0, obj), {});
 
-        console.log(countersValue)
+
         //create a list of possible answers to questions 
         var answer = [];
         for (i = 0; i < questions.length; i++) {
@@ -93,7 +93,7 @@ slackEvents.on('message', (Event) => {
         }
         // create key value pair from counters and answers to be able to choose a result based on the counter value 
         let answersMapped = counters.reduce((obj, arrValue) => (obj[arrValue] = '0', obj), {});
-        console.log(answersMapped)
+
         for (i = 0; i < answer.length; i++) {
             answersMapped[counters[i]] = answer[i]
         }
@@ -116,13 +116,12 @@ slackEvents.on('message', (Event) => {
             greatest = Object.values(countersValue).sort((a, b) => a - b).pop()
             // finds the key that matches the greatest value 
             key = Object.keys(countersValue).find(k => countersValue[k] === greatest)
-            console.log(key)
+
         }
         // sends a message with the text of the largest keyword match value defaults to the first in the list if there 
         // where no matches which is unknown question 
         // TODO look into handling for when questions tie
-        console.log(`the value of key is ${key}`)
-        console.log(answersMapped)
+
         web.chat.postMessage({
             channel: Event.channel,
             thread_ts: Event.ts,

@@ -5,8 +5,7 @@
     "description": "could not match a question",
     "keywords": [],
     "answer": "I am not sure what your are asking",
-    "counter": "unknownQ",
-    "variable": "varunknownQ"
+    "counter": "unknownQ"
 },
 {
     "id": "02",
@@ -14,8 +13,7 @@
     "description": "A question about the weather",
     "keywords": ["weather", "rain", "raining", "sunshine", "cloudy", "hot", "cold", "warm", "cool", "sunny" ],
     "answer": "It is always a great day",
-    "counter": "weatherQ",
-    "variable": "varweatherQ"
+    "counter": "weatherQ"
 },
 
 {
@@ -24,7 +22,6 @@
     "description": "A question about favorite color",
     "keywords": ["color", "favorite", "blue", "red", "green", "yellow", "purple", "pink"],
     "answer": "My favorite color is blue!",
-    "counter": "colorQ",
-    "variable": "varcolorQ"
+    "counter": "colorQ"
 }
 ]
