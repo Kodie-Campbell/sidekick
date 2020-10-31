@@ -120,7 +120,7 @@ slackEvents.on('message', (Event) => {
         }
         // sends a message with the text of the largest keyword match value defaults to the first in the list if there 
         // where no matches which is unknown question 
-        // TODO look into handling for ties 
+        // TODO look into handling for when questions tie
         console.log(`the value of key is ${key}`)
         console.log(answersMapped)
         web.chat.postMessage({
