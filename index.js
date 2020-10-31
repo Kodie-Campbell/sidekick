@@ -20,13 +20,18 @@ const {
     setUncaughtExceptionCaptureCallback
 } = require('process');
 
+// load json file
+const questionsText = fs.readFileSync("questions.json")
+// parse json file to be readable 
+const questions = JSON.parse(questionsText)
+
 // create bot and get the bot token
 const web = new WebClient(process.env.BOT_TOKEN);
 
 // post a message when going online
 web.chat.postMessage({
-    channel: '#test',
-    text: 'I am online and working!',
+    channel: '#testing',
+    text: 'I am online and working! on the json branch',
 })
 
 // create an adapter to receive events from slack
@@ -70,56 +75,61 @@ slackEvents.on('message', (Event) => {
         // turns the users question into an array we can loop though 
         var questionAr = questionText.split(' ');
         console.log(questionAr)
-        // hold a counter to know how to respond after checking for keywords 
-        var colorQ = 0
-        var weatherQ = 0
-        var unknownQ = 1
-        // loads our keyword files 
-        var colorFile = fs.readFileSync('color.txt', 'utf8');
-        var weatherFile = fs.readFileSync('weather.txt', 'utf8');
-        // turns out keyword files into an array 
-        var colorAr = colorFile.split(', ');
-        var weatherAr = weatherFile.split(', ');
-        // checks user message against keyword arrays and increments the corresponding counter 
-        questionAr.forEach(element => {
-            if (colorAr.includes(element)) {
-                colorQ++
-                unknownQ--
-            }
-        });
-        questionAr.forEach(element => {
-            if (weatherAr.includes(element)) {
-                weatherQ++
-                unknownQ--
-            }
-        });
-        // checks what counter is higher and responds with a related message this is not a great 
-        // way of doing it because with lots of questions it will be a lot of if statements 
 
-        // adds question variables to a dictionary
-        let testAnswer = {
-            colorQ,
-            weatherQ,
-            unknownQ
+        // create a list of counters to use a variables 
+        var counters = [];
+        for (i = 0; i < questions.length; i++) {
+            counters[i] = questions[i]["counter"]
         }
-        // finds the greatest value in the dictionary 
-        greatest = Object.values(testAnswer).sort((a, b) => a - b).pop()
-        // finds the key that matches the greatest value 
-        key = Object.keys(testAnswer).find(k => testAnswer[k] === greatest)
-        console.log(key)
+        console.log(`counters is set to: ${counters}`)
+        // turn list into key value pairs to hold data 
+        var countersValue = counters.reduce((obj, arrValue) => (obj[arrValue] = 0, obj), {});
 
-        // makes a dictionary out of possible answers 
-        const answers = {
-            colorQ: 'My favorite color is blue!',
-            weatherQ: 'It is always a great day',
-            unknownQ: 'I am not sure what you are asking'
+        console.log(countersValue)
+        //create a list of possible answers to questions 
+        var answer = [];
+        for (i = 0; i < questions.length; i++) {
+            answer[i] = questions[i]["answer"]
         }
-        // sends a message with the text of the largest keyword match value 
+        // create key value pair from counters and answers to be able to choose a result based on the counter value 
+        let answersMapped = counters.reduce((obj, arrValue) => (obj[arrValue] = '0', obj), {});
+        console.log(answersMapped)
+        for (i = 0; i < answer.length; i++) {
+            answersMapped[counters[i]] = answer[i]
+        }
+
+        // loop though the array created from the  users question and looks for matches in the keywords from the json file 
+        // increases the counters value to determine the most likely proper response 
+        for (i = 0; i < counters.length; i++) {
+
+
+            questionAr.forEach(element => {
+                if (questions[i].keywords.includes(element)) {
+                    countersValue[counters[i]]++
+
+                }
+            })
+
+
+
+            // finds the greatest value in the dictionary 
+            greatest = Object.values(countersValue).sort((a, b) => a - b).pop()
+            // finds the key that matches the greatest value 
+            key = Object.keys(countersValue).find(k => countersValue[k] === greatest)
+            console.log(key)
+        }
+        // sends a message with the text of the largest keyword match value defaults to the first in the list if there 
+        // where no matches which is unknown question 
+        // TODO look into handling for ties 
+        console.log(`the value of key is ${key}`)
+        console.log(answersMapped)
         web.chat.postMessage({
             channel: Event.channel,
             thread_ts: Event.ts,
-            text: answers[key]
+            text: answersMapped[key]
         });
+
+
 
     }
 
