@@ -23,5 +23,23 @@
     "keywords": ["color", "favorite", "blue", "red", "green", "yellow", "purple", "pink"],
     "answer": "My favorite color is blue!",
     "counter": "colorQ"
+},
+
+{
+    "id": "04",
+    "title": "birthday",
+    "description": "A question about the bots birthday",
+    "keywords": ["birthday", "born"],
+    "answer": "My birthday is 10-10-2020 :tada:",
+    "counter": "birthdayQ"
+},
+
+{
+    "id": "05",
+    "title": "what is your purpose",
+    "description": "A question about the purpose of sidekick",
+    "keywords": ["purpose", "created", "job", "goal"],
+    "answer": "I was created to help people work more efficiently ",
+    "counter": "purposeQ"
 }
 ]

@@ -31,7 +31,7 @@ const web = new WebClient(process.env.BOT_TOKEN);
 // post a message when going online
 web.chat.postMessage({
     channel: '#testing',
-    text: 'I am online and working! on the json branch',
+    text: 'I am online and working! on the master branch',
 })
 
 // create an adapter to receive events from slack
